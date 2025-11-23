@@ -35,5 +35,29 @@ stages:
       - script: |
           echo "Running unit tests..."
         displayName: 'Run unit tests'
+- stage: DeployToStaging
+  displayName: 'Deploy to staging'
+  dependsOn: Test
+  jobs:
+    - job: DeployStagingJob
+      displayName: 'Deploy to Staging Job'
+      pool:
+        vmImage: 'windows:latest'
+      steps:
+        - script: |
+            echo 'Build Staging Job'
+          displayName: 'Build and deploy to staging'
+    - job: DeployStagingJobWithValidation
+      pool: server
+      timeoutInMinutes: 4320
+      displayName: 'Deploy to Staging Job'
+      steps:
+        - task: ManualValidation@1
+          timeoutInMinutes: 1440
+          inputs:
+            notifyUsers: 'gethabtish@yahoo.com'
+            instructions: 'Please validate the stage configuration and resume'
+            onTimeout: 'resume'
+
 
 
