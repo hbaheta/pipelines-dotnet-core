@@ -6,24 +6,21 @@
 trigger:
 - master
 
-strategy:
-  matrix:
-    linux:
-      imageName: "ubuntu-latest"
-    mac:
-      imageName: "macOS-latest"
-    windows:
-      imageName: "windows-latest"
-  maxParallel: 3
-
 pool:
-  vmImage: $(imageName)
+  vmImage: 'windows-lates'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build Job'
+    steps:
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+    - script: |
+        echo 'Restoring Project dependencies...'
+      displayName: 'Restore Dependencies'
+    - script: |
+        echo "Running unit tests..."
+      displayName: 'Run unit tests'
